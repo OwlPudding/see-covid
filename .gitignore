@@ -1,2 +1,5 @@
+.DS_Store
 server.key
 server.crt
+localhost+3.pem
+localhost+3-key.pem
