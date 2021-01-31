@@ -31,22 +31,28 @@ function fetchData(position) {
     .then(response => response.json())
     .then(data => console.log(data));
 }
+function getCoords() {
+  return new Promise(function(resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+}
 window.addEventListener("load", async () => {
   cameraStart();
+  const position = await getCoords();
+  const { latitude: lat, longitude: lon } = position.coords;
+  console.log(lat, ",", lon);
+  const a = await fetch(`https://see-covid-backend.herokuapp.com/nearby_zipCodes?lat=${lat}&lon=${lon}`);
+  console.log("res", a.json());
+  // if(!navigator.geolocation) {
+  //   console.log('Geolocation is not supported by your browser');
+  // } else {
+  //   console.log('Locating…');
+  //   navigator.geolocation.getCurrentPosition(
+  //     fetchData,
+  //     () => console.log('Unable to retrieve your location')
+  //   );
+  // }
 
-  if(!navigator.geolocation) {
-    console.log('Geolocation is not supported by your browser');
-  } else {
-    console.log('Locating…');
-    navigator.geolocation.getCurrentPosition(
-      fetchData,
-      () => console.log('Unable to retrieve your location')
-    );
-  }
-
-  // while (!data) { console.log("data not yet retrieved"); }
-
-  // console.log(data);
   // https://see-covid-backend.herokuapp.com/nearby_zipCodes?lat=40.743919&lon=-73.899131
   // http://see-covid-backend.herokuapp.com/get_info?zipCode=11377
   // fetch('http://example.com/movies.json')
