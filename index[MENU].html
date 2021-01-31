@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>See COVID</title>
+  <style>
+    #camera {
+      opacity: 1;
+      position: fixed;
+      background-size: 100% 100%;
+      top: 0;
+      left: 0; 
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+    }
+  </style>
+  <!-- A-FRAME -->
+  <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+  <!-- <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script> -->
+  <script src="main.js"></script>
+</head>
+<body>
+  <video id="camera" autoplay playsinline></video>
+  <a-scene vr-mode-ui="enabled: false;">
+    <!-- <a-box
+      color="#689F38"
+      width="4"
+      height="2"
+      depth="0.2"
+      position="0 1 -7"
+    >
+    </a-box> -->
+    <!-- Origin at 0 1.6 0 in Desktop Mode -->
+    <!-- Average height | human eye level -->
+    <!-- user-height="1.6 by default" -->
+    <!-- <a-entity
+      position="0 0 0"
+    > -->
+    <a-entity>
+      <a-camera>
+        <!-- <a-entity raycaster="objects: .link" cursor position="0 0 -1"
+          geometry="primitive: sphere; radius: 0.005"
+          material="color: #000000; shader: flat; opacity: 0.5;" ></a-entity> -->
+        <a-plane
+          id="plane"
+          position="0 0 -7"
+          material="shader: flat;
+          color: #222;
+          opacity: 0.75;"
+          scale="6.5 11.5 1"
+        ></a-plane>
+        <!-- TOP = zip code + county name -->
+        <a-entity id="local">
+          <a-entity
+            id="zip-code"
+            position="0.05 0.775 -1"
+            text="value: 11377;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.3 0.775 -1"
+            text="value: Queens County;
+            color: #FFF;"
+          ></a-entity>
+          <!-- local -->
+          <!-- weekly local -->
+          <a-entity
+            position="0.05 0.675 -1"
+            text="value: Weekly;
+            color: #FFF;"
+          ></a-entity>
+          <a-box
+            position="-2.6 4.5 -7"
+            scale="1 0.005 0.02"
+            material="shader: flat;"></a-box>
+          <!-- positive cases -->
+          <a-entity
+            position="0.55 0.575 -1"
+            text="value: 6042;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.05 0.475 -1"
+            text="value: Positive Cases;
+            color: #FFF;"
+          ></a-entity>
+          <!-- positivity rate -->
+          <a-entity
+            position="0.875 0.575 -1"
+            text="value: 13.1%;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.365 0.475 -1"
+            text="value: Positivity Rate;
+            color: #FFF;"
+          ></a-entity>
+          <!-- infection rate -->
+          <a-entity
+            position="1.225 0.575 -1"
+            text="value: 1.00;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.675 0.475 -1"
+            text="value: Infection Rate;
+            color: #FFF;"
+          ></a-entity>
+          <!-- total local -->
+          <a-entity
+            position="0.05 0.41 -1"
+            text="value: Total;
+            color: #FFF;"
+          ></a-entity>
+          <a-box
+            position="-2.75 2.7 -7"
+            scale="0.71 0.005 0.05"
+            material="shader: flat;"></a-box>
+          <!-- positive cases -->
+          <a-entity
+            position="0.55 0.325 -1"
+            text="value: 6042;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.05 0.225 -1"
+            text="value: Positive Cases;
+            color: #FFF;"
+          ></a-entity>
+          <!-- positivity rate -->
+          <a-entity
+            position="0.875 0.325 -1"
+            text="value: 13.1%;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.365 0.225 -1"
+            text="value: Positivity Rate;
+            color: #FFF;"
+          ></a-entity>
+          <!-- infection rate -->
+          <a-entity
+            position="1.225 0.325 -1"
+            text="value: 1.00;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.675 0.225 -1"
+            text="value: Infection Rate;
+            color: #FFF;"
+          ></a-entity>
+        </a-entity>
+        <a-entity id="city" position="0 -0.65 0">
+          <a-entity
+            position="0.3 0.74 -1"
+            text="value: New York City;
+            color: #FFF;"
+          ></a-entity>
+          <!-- local -->
+          <!-- weekly local -->
+          <a-entity
+            position="0.05 0.675 -1"
+            text="value: Weekly;
+            color: #FFF;"
+          ></a-entity>
+          <a-box
+            position="-2.6 -0.01 -7"
+            scale="1 0.005 0.02"
+            material="shader: flat;"></a-box>
+          <!-- positive cases -->
+          <a-entity
+            position="0.55 0.575 -1"
+            text="value: 6042;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.05 0.475 -1"
+            text="value: Positive Cases;
+            color: #FFF;"
+          ></a-entity>
+          <!-- positivity rate -->
+          <a-entity
+            position="0.875 0.575 -1"
+            text="value: 13.1%;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.365 0.475 -1"
+            text="value: Positivity Rate;
+            color: #FFF;"
+          ></a-entity>
+          <!-- infection rate -->
+          <a-entity
+            position="1.225 0.575 -1"
+            text="value: 1.00;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.675 0.475 -1"
+            text="value: Infection Rate;
+            color: #FFF;"
+          ></a-entity>
+          <!-- total local -->
+          <a-entity
+            position="0.05 0.41 -1"
+            text="value: Total;
+            color: #FFF;"
+          ></a-entity>
+          <a-box
+            position="-2.75 -1.8 -7"
+            scale="0.71 0.005 0.05"
+            material="shader: flat;"></a-box>
+          <!-- positive cases -->
+          <a-entity
+            position="0.55 0.325 -1"
+            text="value: 6042;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.05 0.225 -1"
+            text="value: Positive Cases;
+            color: #FFF;"
+          ></a-entity>
+          <!-- positivity rate -->
+          <a-entity
+            position="0.875 0.325 -1"
+            text="value: 13.1%;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.365 0.225 -1"
+            text="value: Positivity Rate;
+            color: #FFF;"
+          ></a-entity>
+          <!-- infection rate -->
+          <a-entity
+            position="1.225 0.325 -1"
+            text="value: 1.00;
+            width: 2;
+            color: #FFF;"
+          ></a-entity>
+          <a-entity
+            position="0.675 0.225 -1"
+            text="value: Infection Rate;
+            color: #FFF;"
+          ></a-entity>
+        </a-entity>
+      </a-camera>
+    </a-entity>
+  </a-scene>
+</body>
+</html>

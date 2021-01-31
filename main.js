@@ -1,5 +1,13 @@
 let cameraView;
-let data;
+let nearbyData;
+let myZipData;
+// let compass;
+// const isIOS = !(
+//   navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
+//   navigator.userAgent.match(/AppleWebKit/)
+// );
+
+import * as merc from "./merc.js";
 
 let constraints = {
   video: {
@@ -24,40 +32,89 @@ function cameraStart() {
       console.error("Error:", error);
     });
 }
-function fetchData(position) { 
-  const { latitude: lat, longitude: lon } = position.coords;
-
-  fetch(`https://see-covid-backend.herokuapp.com/nearby_zipCodes?lat=${lat}&lon=${lon}`)
-    .then(response => response.json())
-    .then(data => console.log(data));
-}
 function getCoords() {
   return new Promise(function(resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 }
+function getHeading() {
+  if (window.DeviceOrientationEvent) {
+    return new Promise(function(resolve, reject) {
+      window.addEventListener("deviceorientation", resolve);
+    });
+  } else return null;
+}
 window.addEventListener("load", async () => {
   cameraStart();
+
+  let initialDir;
+  const gh = await getHeading();
+  if (gh.webkitCompassHeading) {
+    initialDir = gh.webkitCompassHeading;
+  } else {
+    initialDir = gh.alpha;
+  }
+  document.querySelector("#orientation").setAttribute("text", `
+    value: DIR=${initialDir};
+    color: #FFFFFF;
+  `);
+  document.querySelector("#waypoint-container").setAttribute("rotation", `
+    0 ${initialDir >= 180 ? -initialDir : initialDir} 0
+  `);
+
   const position = await getCoords();
   const { latitude: lat, longitude: lon } = position.coords;
-  console.log(lat, ",", lon);
-  const a = await fetch(`https://see-covid-backend.herokuapp.com/nearby_zipCodes?lat=${lat}&lon=${lon}`);
-  console.log("res", a.json());
-  // if(!navigator.geolocation) {
-  //   console.log('Geolocation is not supported by your browser');
-  // } else {
-  //   console.log('Locating…');
-  //   navigator.geolocation.getCurrentPosition(
-  //     fetchData,
-  //     () => console.log('Unable to retrieve your location')
-  //   );
-  // }
+  console.log(lat, lon);
+  await fetch(`https://see-covid-backend.herokuapp.com/nearby_zipCodes?lat=${lat}&lon=${lon}`)
+    .then(response => response.json())
+    .then(data => {
+      const { zipCode } = data;
+      nearbyData = data;
+      return fetch(`https://see-covid-backend.herokuapp.com/get_info?zipCode=${zipCode}`);
+    })
+    .then(response => response.json())
+    .then(data => { myZipData = data; });
+  console.log(nearbyData, myZipData);
 
-  // https://see-covid-backend.herokuapp.com/nearby_zipCodes?lat=40.743919&lon=-73.899131
-  // http://see-covid-backend.herokuapp.com/get_info?zipCode=11377
-  // fetch('http://example.com/movies.json')
-  //   .then(response => response.json())
-  //   .then(data => console.log(data));
+  const container = document.querySelector("#waypoint-container");
+
+  const {
+    nearbyCoords,
+    nearbyCountyNames,
+    nearbyZipCodes,
+    zipCode,
+  } = nearbyData;
+  nearbyZipCodes.forEach((zip, i) => {
+    const coords = nearbyCoords[i];
+    const countyName = nearbyCountyNames[i];
+
+    let a = document.createElement("a-entity");
+    a.setAttribute("text", `
+      value: zip: ${zip}\ncoords: ${coords}\ncounty: ${countyName};
+      color: #FFFFFF;
+    `);
+    // translate image card to xy 
+    // var imagePos = merc.fromLatLngToPoint({lat: -27.470127, lng: 153.0147027});
+    const imagePos = merc.fromLatLngToPoint({ lat: coords[0], lng: coords[1] });
+    
+    // translate current device position to a lat/lng
+    const currentDevicePos = merc.fromLatLngToPoint({ lat: lat, lng: lon });
+
+    const imageFinalPosX = imagePos.x - currentDevicePos.x;
+    const imageFinalPosY = imagePos.y - currentDevicePos.y;
+
+    a.setAttribute("position", `${imageFinalPosX*90} 1.6 ${imageFinalPosY*90}`);
+    console.log(`${zip} placed at ${imageFinalPosX*90} 1.6 ${imageFinalPosY*90}`);
+
+    a.setAttribute("look-at", "#cam");
+
+    container.appendChild(a);
+  });
+
+  // document.querySelector('#plane').addEventListener('click', function () {
+  //   this.setAttribute('material', 'color', 'red');
+  //   console.log('I was clicked!');
+  // });
   // const { width, height } = window.screen;
   // if (height >= 750) {
   //   const lc = document.querySelector("#local-container");
