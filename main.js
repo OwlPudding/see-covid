@@ -59,7 +59,7 @@ window.addEventListener("load", async () => {
     color: #FFFFFF;
   `);
   document.querySelector("#waypoint-container").setAttribute("rotation", `
-    0 ${initialDir >= 180 ? -initialDir : initialDir} 0
+    0 ${initialDir >= 180 ? 360-initialDir : initialDir} 0
   `);
 
   const position = await getCoords();

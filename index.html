@@ -4,57 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>See COVID</title>
-  <style>
-    #camera {
-      opacity: 1;
-      position: fixed;
-      background-size: 100% 100%;
-      top: 0;
-      left: 0; 
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
   <!-- A-FRAME -->
   <script src="//ai.github.io/compass.js/compass.js"></script>
   <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
   <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
   <!-- <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script> -->
-  <script type="module" src="main.js"></script>
+  <!-- <script type="module" src="main.js"></script> -->
+  <script type="module" src="start.js"></script>
 </head>
 <body>
+  <div id="local-data">
+    <div id="loading">
+      Finding location...
+    </div>
+    <div id="local-title"></div>
+    <div id="zip">
+      <div class="weekly-title"></div>
+      <div id="weekly"></div>
+      <div class="total-title"></div>
+      <div id="total"></div>
+    </div>
+    <div id="city-title"></div>
+    <div id="city">
+      <div class="weekly-title"></div>
+      <div id="weekly"></div>
+      <div class="total-title"></div>
+      <div id="total"></div>
+    </div>
+    <button id="ar-mode">
+      See COVID around you
+    </button>
+  </div>
   <video id="camera" autoplay playsinline></video>
-  <a-scene vr-mode-ui="enabled: false;">
-    <!-- <a-box
-      color="#689F38"
-      width="4"
-      height="2"
-      depth="0.2"
-      position="0 1 -7"
-    >
-    </a-box> -->
-    <!-- Origin at 0 1.6 0 in Desktop Mode -->
-    <!-- Average height | human eye level -->
-    <!-- user-height="1.6 by default" -->
-    <!-- <a-entity
-      position="0 0 0"
-    > -->
+  <a-scene vr-mode-ui="enabled: false;" id="main-scene" visible="false">
     <a-entity>
       <a-camera id="cam">
-        <!-- <a-entity raycaster="objects: .link" cursor position="0 0 -1"
-          geometry="primitive: sphere; radius: 0.005"
-          material="color: #000000; shader: flat; opacity: 0.5;" ></a-entity> -->
-          <a-entity id="orientation" position="0 1 -2"></a-entity>
+        <a-entity id="orientation" position="0 1 -2"></a-entity>
       </a-camera>
     </a-entity>
-    <a-circle color="#00AA00" radius="3" rotation="-90 0 0"></a-circle>
     <a-entity id="waypoint-container"></a-entity>
-    <a-sphere position="0 1.6 -1" radius="0.01" color="white"></a-sphere>
+  </a-scene>
+
+  <!-- <a-sphere position="0 1.6 -1" radius="0.01" color="white"></a-sphere>
     <a-sphere position="1 1.6 0" radius="0.01" color="white"></a-sphere>
     <a-sphere position="0 1.6 1" radius="0.01" color="white"></a-sphere>
-    <a-sphere position="-1 1.6 0" radius="0.01" color="white"></a-sphere>
-  </a-scene>
+    <a-sphere position="-1 1.6 0" radius="0.01" color="white"></a-sphere> -->
 </body>
 </html>
