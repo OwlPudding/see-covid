@@ -1,17 +1,17 @@
-import * as merc from "./merc.js";
 
-window.addEventListener("load", init, false);
 
 let cameraView;
 let nearbyData;
 let myZipData;
 let cityData;
 
+import * as merc from "./merc.js";
+
 let constraints = {
   video: {
-    // facingMode: {
-    //   exact: "environment"
-    // },
+    facingMode: {
+      exact: "environment"
+    },
   },
 };
 function fmt(n) {
@@ -176,8 +176,9 @@ async function beginARMode(lat, lon) {
     nearbyCountyNames,
     nearbyZipCodes,
   } = nearbyData;
+  const { zipCode } = myZipData;
   document.querySelector("#local-data").remove();
-  document.querySelector("#main-scene").setAttribute("visible", "true");
+  // document.querySelector("#main-scene").setAttribute("visible", "true");
 
   let initialDir;
   const gh = await getHeading();
@@ -193,15 +194,26 @@ async function beginARMode(lat, lon) {
   document.querySelector("#waypoint-container").setAttribute("rotation", `
     0 ${initialDir >= 180 ? 360 - initialDir : initialDir} 0
   `);
+  const container = document.querySelector("#waypoint-container");
   nearbyZipCodes.forEach((zip, i) => {
     const coords = nearbyCoords[i];
     const countyName = nearbyCountyNames[i];
 
     let a = document.createElement("a-entity");
+    // let covidData;
+    // await fetch(`https://see-covid-backend.herokuapp.com/get_info?zipCode=${zipCode}`)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     covidData = data;
+    //   });
     a.setAttribute("text", `
       value: zip: ${zip}\ncoords: ${coords}\ncounty: ${countyName};
       color: #FFFFFF;
     `);
+    // a.setAttribute("text", `
+    //   value: zip: ${zip}\npositive cases: ${fmt(zipCode['people_positive_7day'])}\npositivity rate: ${zipCode['percentpositivity_7day']}\ninfection rate: ${zipCode['infection_rate_7day']};
+    //   color: #FFFFFF;
+    // `);
 
     // translate image card to xy 
     // var imagePos = merc.fromLatLngToPoint({lat: -27.470127, lng: 153.0147027});
@@ -255,30 +267,9 @@ async function init() {
   insertCityData();
 
   document.querySelector("#ar-mode").style.display = "initial";
-  document.querySelector("#ar-mode").addEventListener("click", () => {
+  document.querySelector("#ar-mode").onclick = () => {
     beginARMode(lat, lon);
-  });
+  };
 }
-// setTimeout(() => {
-// document.querySelector("body").innerHTML = `
-// <a-scene vr-mode-ui="enabled: false;">
-//     <!-- Origin at 0 1.6 0 in Desktop Mode -->
-//     <!-- Average height | human eye level -->
-//     <!-- user-height="1.6 by default" -->
-//     <!-- <a-entity position="0 0 0" > -->
-//     <!-- <a-entity raycaster="objects: .link" cursor position="0 0 -1"
-//           geometry="primitive: sphere; radius: 0.005"
-//           material="color: #000000; shader: flat; opacity: 0.5;" ></a-entity> -->
-//     <a-entity>
-//       <a-camera id="cam">
-//           <a-entity id="orientation" position="0 1 -2"></a-entity>
-//       </a-camera>
-//     </a-entity>
-//     <!-- <a-circle color="#00AA00" radius="3" rotation="-90 0 0"></a-circle> -->
-//     <a-entity id="waypoint-container"></a-entity>
-//     <a-sphere position="0 1.6 -1" radius="0.01" color="white"></a-sphere>
-//     <a-sphere position="1 1.6 0" radius="0.01" color="white"></a-sphere>
-//     <a-sphere position="0 1.6 1" radius="0.01" color="white"></a-sphere>
-//     <a-sphere position="-1 1.6 0" radius="0.01" color="white"></a-sphere>
-//   </a-scene>
-// `;}, 3000);
+
+window.addEventListener("load", init, false);

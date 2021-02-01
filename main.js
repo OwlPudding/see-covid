@@ -81,16 +81,25 @@ window.addEventListener("load", async () => {
   const {
     nearbyCoords,
     nearbyCountyNames,
-    nearbyZipCodes,
-    zipCode,
+    nearbyZipCodes
   } = nearbyData;
   nearbyZipCodes.forEach((zip, i) => {
     const coords = nearbyCoords[i];
     const countyName = nearbyCountyNames[i];
 
     let a = document.createElement("a-entity");
+    let covidData;
+    await fetch(`https://see-covid-backend.herokuapp.com/get_info?zipCode=${zipCode}`)
+      .then(response => response.json())
+      .then(data => {
+        covidData = data;
+      });
+    // a.setAttribute("text", `
+    //   value: zip: ${zip}\ncoords: ${coords}\ncounty: ${countyName};
+    //   color: #FFFFFF;
+    // `);
     a.setAttribute("text", `
-      value: zip: ${zip}\ncoords: ${coords}\ncounty: ${countyName};
+      value: zip: ${zip}\npositive cases: ${fmt(zipCode['people_positive_7day'])}\npositivity rate: ${zipCode['percentpositivity_7day']}\ninfection rate: ${zipCode['infection_rate_7day']};
       color: #FFFFFF;
     `);
     // translate image card to xy 

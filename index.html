@@ -6,11 +6,9 @@
   <title>See COVID</title>
   <link rel="stylesheet" href="style.css" />
   <!-- A-FRAME -->
-  <script src="//ai.github.io/compass.js/compass.js"></script>
+  <!-- <script src="//ai.github.io/compass.js/compass.js"></script> -->
   <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
   <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-  <!-- <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script> -->
-  <!-- <script type="module" src="main.js"></script> -->
   <script type="module" src="start.js"></script>
 </head>
 <body>
@@ -37,18 +35,17 @@
     </button>
   </div>
   <video id="camera" autoplay playsinline></video>
-  <a-scene vr-mode-ui="enabled: false;" id="main-scene" visible="false">
+  <a-scene vr-mode-ui="enabled: false;">
     <a-entity>
       <a-camera id="cam">
         <a-entity id="orientation" position="0 1 -2"></a-entity>
       </a-camera>
     </a-entity>
     <a-entity id="waypoint-container"></a-entity>
-  </a-scene>
-
-  <!-- <a-sphere position="0 1.6 -1" radius="0.01" color="white"></a-sphere>
+    <a-sphere position="0 1.6 -1" radius="0.01" color="white"></a-sphere>
     <a-sphere position="1 1.6 0" radius="0.01" color="white"></a-sphere>
     <a-sphere position="0 1.6 1" radius="0.01" color="white"></a-sphere>
-    <a-sphere position="-1 1.6 0" radius="0.01" color="white"></a-sphere> -->
+    <a-sphere position="-1 1.6 0" radius="0.01" color="white"></a-sphere>
+  </a-scene>
 </body>
 </html>
